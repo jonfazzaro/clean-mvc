@@ -1,87 +1,37 @@
-﻿@model IEnumerable<MvcMovie.Models.Movie>
-@{
-    ViewBag.Title = "Index";
+﻿@model MvcMovie.Presentation.MovieListViewModel
 
-    var GenreLst = new List<string>();
-
-    var GenreQry = from d in Model
-                   orderby d.Genre
-                   select d.Genre;
-
-    GenreLst.AddRange(GenreQry.Distinct());
-    ViewBag.movieGenre = new SelectList(GenreLst);
-
-}
 <h2>Index</h2>
 <p>
     @Html.ActionLink("Create New", "Create")
     @using (Html.BeginForm("Index", "Movies", FormMethod.Get)) {
     <p>
-        Genre: @Html.DropDownList("movieGenre", "All")
-        Title: @Html.TextBox("SearchString")
+        Genre: @Html.DropDownListFor(m => m.Genre, new SelectList(Model.Genres, Model.Genre), "All")
+        Title: @Html.TextBoxFor(m => m.Filter)
         <input type="submit" value="Filter" />
     </p>
     }
-    </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rating)
-            </th>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Sample.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sample.ReleaseDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sample.Genre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sample.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sample.Rating)
+        </th>
 
-            <th></th>
-        </tr>
-        @{
-            var movies = Model;
-            var searchString = Request["searchString"];
-
-            if (!String.IsNullOrEmpty(searchString)) {
-                movies = movies.Where(s => s.Title.Contains(searchString));
-            }
-
-            var movieGenre = Request["movieGenre"];
-
-            if (!string.IsNullOrEmpty(movieGenre)) {
-                movies = movies.Where(x => x.Genre == movieGenre);
-            }
-
-            foreach (var item in movies) {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReleaseDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Genre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Rating)
-                    </td>
-
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-                    </td>
-                </tr>
-            }
-        }
-
-    </table>
+        <th></th>
+    </tr>
+    @foreach (var movie in Model.Movies) {
+        @Html.Partial("_MovieTableRow", movie)
+    }
+</table>

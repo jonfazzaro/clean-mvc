@@ -1,8 +1,11 @@
 ﻿using MvcMovie.Models;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Net;
 using System.Web.Mvc;
+using MvcMovie.Presentation;
 
 namespace MvcMovie.Controllers {
 
@@ -10,8 +13,12 @@ namespace MvcMovie.Controllers {
 
         private MovieDBContext db = new MovieDBContext();
 
-        public ActionResult Index(string movieGenre, string searchString) {
-            return View(db.Movies);
+        public ActionResult Index(string genre, string filter) {
+            var model = new MovieListViewModel(db.Movies);
+            ViewBag.Title = model.Title;
+            model.Genre = genre;
+            model.Filter = filter;
+            return View(model);
         }
 
 
