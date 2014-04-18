@@ -6,12 +6,18 @@ using System.Data.Entity;
 using System.Net;
 using System.Web.Mvc;
 using MvcMovie.Presentation;
+using System.Diagnostics;
 
 namespace MvcMovie.Controllers {
 
     public class MoviesController : Controller {
 
-        private MovieDBContext db = new MovieDBContext();
+        private readonly MovieDBContext db;
+
+        public MoviesController() {
+            db = new MovieDBContext();
+            db.Database.Log = (sql) => Debug.WriteLine(sql);
+        }
 
         public ActionResult Index(string genre, string filter) {
             var model = new MovieListViewModel(db.Movies);

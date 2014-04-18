@@ -6,9 +6,9 @@ namespace MvcMovie.Presentation {
 
     public class MovieListViewModel {
 
-        private readonly IEnumerable<Movie> _movies;
+        private readonly IQueryable<Movie> _movies;
 
-        public MovieListViewModel(IEnumerable<Movie> movies) {
+        public MovieListViewModel(IQueryable<Movie> movies) {
             _movies = movies;
             Title = "Movies";
             Sample = new Movie();
@@ -19,7 +19,7 @@ namespace MvcMovie.Presentation {
         public string Filter { get; set; }
         public Movie Sample { get; set; }
 
-        public IEnumerable<string> Genres { 
+        public IQueryable<string> Genres { 
             get {
                 return _movies
                     .Select(m => m.Genre)
@@ -27,7 +27,7 @@ namespace MvcMovie.Presentation {
             }
         }
 
-        public IEnumerable<Movie> Movies {
+        public IQueryable<Movie> Movies {
             get { 
                 return _movies
                     .ByGenre(Genre)

@@ -4,15 +4,15 @@ using System.Linq;
 namespace MvcMovie.Models {
     public static class MovieSpecifications {
 
-        public static IEnumerable<Movie> ByGenre(this IEnumerable<Movie> movies, string genre) {
+        public static IQueryable<Movie> ByGenre(this IQueryable<Movie> movies, string genre) {
             return movies.Where(m =>
-                string.IsNullOrWhiteSpace(genre) ||
+                (genre == null || genre.Trim() == string.Empty) ||
                 m.Genre.Equals(genre));
         }
 
-        public static IEnumerable<Movie> ByPartialTitle(this IEnumerable<Movie> movies, string search) {
+        public static IQueryable<Movie> ByPartialTitle(this IQueryable<Movie> movies, string search) {
             return movies.Where(m =>
-                string.IsNullOrWhiteSpace(search) ||
+                (search == null || search.Trim() == string.Empty) ||
                 m.Title.ToLower().Contains(search.ToLower()));
         }
     }
